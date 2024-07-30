@@ -25,6 +25,18 @@ read -p "Enter your EVM address: " EVM_ADDR
 DATA_DIR="./data/data"
 CYSIC_DIR="./data/cysic"
 
+# Unduh install.sh menggunakan wget
+echo -e "${GREEN}Downloading install.sh...${NC}"
+wget -O install.sh https://raw.githubusercontent.com/smdbngkt/cysic-docker/main/install.sh
+
+# Memberikan izin eksekusi pada install.sh
+echo -e "${GREEN}Making install.sh executable...${NC}"
+chmod +x install.sh
+
+# Menjalankan install.sh (jika diperlukan)
+echo -e "${GREEN}Running install.sh...${NC}"
+./install.sh
+
 # Menarik Docker image terbaru
 echo -e "${GREEN}Pulling latest Docker image...${NC}"
 docker pull whoami39/cysic-verifier:latest
