@@ -18,21 +18,26 @@ echo -e "${MAGENTA}  __/  \\\\  |: \\.        |(| (___\\ || ${NC}"
 echo -e "${CYAN} /\" \\   :) |.  \\    /:  ||:       :) ${NC}"
 echo -e "${RED}(_______/  |___|\\__/|___|(________/  ${NC}"
 
-# Prompt user for EVM address
-read -p "Enter your EVM address: " EVM_ADDR
+# Prompt untuk memasukkan EVM address
+read -p "Masukkan EVM Address Anda: " EVM_ADDR
 
-# Direktori data
-DATA_DIR="./data/data"
-CYSIC_DIR="./data/cysic"
+# Buat file docker-compose.yml
+echo "version: '3.8'
 
-# Menarik Docker image terbaru
-echo -e "${GREEN}Pulling latest Docker image...${NC}"
-docker pull whoami39/cysic-verifier:latest
+services:
+  verifier:
+    image: whoami39/cysic-verifier:latest
+    environment:
+      - EVM_ADDR=$EVM_ADDR
+    volumes:
+      - ./data/data:/app/data
+      - ./data/cysic/:/root/.cysic/
+    network_mode: 'host'
+    restart: unless-stopped
+" > docker-compose.yml
 
-# Menjalankan Docker container
-echo -e "${GREEN}Running Docker container...${NC}"
-docker run -e EVM_ADDR="$EVM_ADDR" \
-           -v $DATA_DIR:/app/data \
-           -v $CYSIC_DIR:/root/.cysic/ \
-           --network host \
-           whoami39/cysic-verifier:latest
+# Buat direktori yang diperlukan
+mkdir -p ./data/data ./data/cysic
+
+# Jalankan docker-compose
+docker-compose up -d
